@@ -1,7 +1,8 @@
 from extensions import db
 from sqlalchemy_serializer import SerializerMixin
 
-
+# represents columns in film table in database
+#using se
 class Film(db.Model, SerializerMixin):
     __tablename__ = 'film'
 
