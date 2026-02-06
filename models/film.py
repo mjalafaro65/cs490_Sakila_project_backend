@@ -1,20 +1,21 @@
 from extensions import db
 from sqlalchemy_serializer import SerializerMixin
 
+
 class Film(db.Model, SerializerMixin):
     __tablename__ = 'film'
 
-    film_id = db.Column(db.SMALLINT(unsigned=True), primary_key=True)
-    title = db.Column(db.VARCHAR(128), nullable=False)
+    film_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(128), nullable=False)
     description = db.Column(db.Text)
-    release_year = db.Column(db.YEAR)
-    language_id = db.Column(db.TINYINT(unsigned=True), nullable=False)
-    original_language_id = db.Column(db.TINYINT(unsigned=True))
-    rental_duration = db.Column(db.TINYINT(unsigned=True), nullable=False)
-    rental_rate = db.Column(db.DECIMAL(4,2), nullable=False)
-    length = db.Column(db.SMALLINT(unsigned=True), nullable=False)
-    replacement_cost = db.Column(db.DECIMAL(5,2), nullable=False)
-    rating = db.Column(db.ENUM('G','PG','PG-13','R','NC-17'))
+    release_year = db.Column(db.Integer)
+    language_id = db.Column(db.Integer,nullable=False)
+    original_language_id = db.Column(db.Integer)
+    rental_duration = db.Column(db.Integer, nullable=False)
+    rental_rate = db.Column(db.Float, nullable=False)
+    length = db.Column(db.Integer, nullable=False)
+    replacement_cost = db.Column(db.Float, nullable=False)
+    rating = db.Column(db.String(10))
 
     # def to_dict(self):
     #     return{

@@ -3,6 +3,7 @@ from flask_restful import Api
 from config import Config 
 from extensions import db
 from flask_restful import Resource
+from resources.film_resource import TopMovies
 
 
 app=Flask(__name__)
@@ -14,12 +15,15 @@ db.init_app(app)
 api.init_app(app)
 
 
-class FilmResource(Resource):
+class Hello(Resource):
     def get(self):
-        return {"message": "List of films"}
+        return {"message": "hello"}
 
 
-api.add_resource(FilmResource, "/")
+api.add_resource(Hello, "/")
+api.add_resource(TopMovies, "/films/top")
+
+
 if __name__=="__main__":
     app.run(debug=True)
 
