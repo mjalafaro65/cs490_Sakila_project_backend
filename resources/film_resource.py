@@ -1,6 +1,6 @@
 from flask_restful import Resource
+from services.film_service import top_films
 
-from services.movie_service import get_top_movies
 class TopMovies(Resource):
     def get (self):
-            return get_top_movies(), 200
+            return top_films(), 200

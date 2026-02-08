@@ -21,7 +21,7 @@ class Hello(Resource):
 
 
 api.add_resource(Hello, "/")
-# api.add_resource(TopMovies, "/films/top")
+api.add_resource(TopMovies, "/films/top")
 
 
 if __name__=="__main__":

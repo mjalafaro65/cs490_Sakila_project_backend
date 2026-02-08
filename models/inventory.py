@@ -1,12 +1,13 @@
 from extensions import db
-from sqlalchemy_serializer import SerializerMixin
 
 #represents inventory table in database
-class Inventory(db.Model, SerializerMixin):
+class Inventory(db.Model):
     __tablename__="inventory"
-    inventory_id=db.Column(db.Integer, primary=True)
-    film_id=db.Column(db.Integer, nullable=False)
-    store_id=db.Column(db.Integer, nullable=False)
+
+
+    inventory_id=db.Column(db.Integer, primary_key=True)
+    film_id=db.Column(db.Integer, db.ForeignKey("film.film_id"), nullable=False)
+    store_id=db.Column(db.Integer,db.ForeignKey("store.store_id"), nullable=False)
 
 
     

@@ -1,11 +1,11 @@
 from extensions import db
-from sqlalchemy_serializer import SerializerMixin
 
 # represents columns in film table in database
 #using se
-class Film(db.Model, SerializerMixin):
+class Film(db.Model):
     __tablename__ = 'film'
 
+    #not for all columns
     film_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), nullable=False)
     description = db.Column(db.Text)
