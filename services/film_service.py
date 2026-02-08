@@ -7,7 +7,7 @@ from sqlalchemy import func
 from schemas.film_schema import films_schema
 
 def top_films():
-
+       #sql query which gets top 5 films
        result= db.session.query(
               Film.title,
               func.count(Rental.rental_id).label("rental_count")
@@ -18,6 +18,8 @@ def top_films():
        .order_by(func.count(Rental.rental_id).desc())\
        .limit(5)\
        .all()
-       print(result)
-       print(films_schema.dump(result))
+      
+       #dump converts to dictionary
        return films_schema.dump(result)
+
+#go to film_resource

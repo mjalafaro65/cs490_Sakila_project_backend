@@ -1,6 +1,6 @@
 from extensions import db
 
-# represents columns in film table in database
+# represents columns(not all) in film table in database
 #using se
 class Film(db.Model):
     __tablename__ = 'film'
