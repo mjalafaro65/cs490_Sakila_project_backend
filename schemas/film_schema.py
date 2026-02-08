@@ -8,11 +8,11 @@ from models.film import Film
 class BaseFilmSchema(mash.SQLAlchemyAutoSchema):
 
     class Meta:
-        model=Film #we dont need to repeat all column names
+        model=Film #we dont need to repeat all  film column names
         load_instance=True #help when json -> model(post)
     rental_count=mash.Integer(dump_only=True) #dump_only: ont with get?
 
-
+#Used in service:
 #worker obj for one film
 film_schema=BaseFilmSchema()
 
