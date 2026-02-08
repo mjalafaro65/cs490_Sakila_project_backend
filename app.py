@@ -3,7 +3,7 @@ from flask_restful import Api
 from config import Config 
 from extensions import db
 from flask_restful import Resource
-from resources.film_resource import TopMovies
+from resources.film_resource import TopMovies, FilmDetails
 
 
 app=Flask(__name__)
@@ -22,6 +22,7 @@ class Hello(Resource):
 
 api.add_resource(Hello, "/")
 api.add_resource(TopMovies, "/films/top")
+api.add_resource(FilmDetails, "/film/<int:id>")
 
 
 if __name__=="__main__":
