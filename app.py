@@ -3,7 +3,8 @@ from flask_restful import Api
 from config import Config 
 from extensions import db
 from flask_restful import Resource
-from resources.film_resource import TopMovies, FilmDetails
+from resources.film_resource import TopFilms, FilmDetails
+from resources.actor_resource import TopActors, ActorWithFilms
 
 
 app=Flask(__name__)
@@ -21,8 +22,10 @@ class Hello(Resource):
 
 
 api.add_resource(Hello, "/")
-api.add_resource(TopMovies, "/films/top")
+api.add_resource(TopFilms, "/films/top")
 api.add_resource(FilmDetails, "/film/<int:id>")
+api.add_resource(TopActors, "/actors/top")
+api.add_resource(ActorWithFilms, "/actor/<int:id>")
 
 
 if __name__=="__main__":
