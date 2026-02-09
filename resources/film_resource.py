@@ -2,7 +2,7 @@ from flask_restful import Resource
 from services.film_service import top_films, one_film
 
 
-class TopMovies(Resource):
+class TopFilms(Resource):
     def get (self):
             
             #Flask_Restful converts returned dic from top_films into json
