@@ -1,0 +1,11 @@
+#package 
+
+#for mash.Nested() in schema to work, all schemas should be imported somewhere. However not all schemas are imported somewhere for use  
+from .film_schema import BaseFilmSchema, FilmSearchSchema
+from .actor_schema import BaseActorSchema, ActorFilmsSchema
+from .category_schema import BaseCategorySchema
+
+#Since were importing classes, we might as well import their objects to use this this package in services
+from .film_schema import film_schema, films_schema, films_search_schema
+from .actor_schema import actor_schema, actors_schema
+from .category_schema import category_schema

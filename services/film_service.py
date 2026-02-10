@@ -1,10 +1,13 @@
 
 from extensions import db
+from sqlalchemy import or_
 from models.film import Film
 from models.rental import Rental
 from models.inventory import Inventory
+from models.actor import Actor
 from sqlalchemy import func
-from schemas.film_schema import films_schema, film_schema
+from schemas import films_schema, film_schema, films_search_schema
+from models.category import Category
 
 def top_films():
        #sql query gets top 5 films
@@ -32,6 +35,37 @@ def one_film(id):
 
        #dump: converts to dictionary
        return film_schema.dump(result)
+
+
+def search_films(srch_str,srch_by):
+
+       #clean white spaces and reduce middle ones to one
+       cleaned=" ".join(srch_str.split())
+       search_pattern=f"%{cleaned}%"
+
+       
+       query=db.session.query(Film).join(Film.actors).join(Film.categories)
+              
+       if srch_by =="title":
+              result=query.filter(Film.title.ilike(search_pattern))
+
+              
+
+       elif srch_by == "actor":
+              result= query.filter(or_(Actor.first_name.ilike(search_pattern),
+                                   Actor.last_name.ilike(search_pattern),
+                                   func.concat(Actor.first_name, " ", Actor.last_name).ilike(search_pattern)
+
+                                   ))
+              
+
+       elif srch_by == "genre":
+              result=query.filter(Category.name.ilike(search_pattern))
+
+       else:
+              return {"message": "Film not found"}, 404 
+       
+       return films_search_schema.dump(result)
 
 
 #go to film_resource

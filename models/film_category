@@ -1,6 +1,6 @@
 from extensions import db
 
-# represents columns(not all) in film_category table in database
+# represents columns(not all) in film table in database
 class Film_Category(db.Model):
     __tablename__ = 'film_category'
 

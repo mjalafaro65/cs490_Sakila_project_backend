@@ -1,5 +1,5 @@
-from flask_restful import Resource
-from services.film_service import top_films, one_film
+from flask_restful import Resource, request
+from services.film_service import top_films, one_film, search_films
 
 
 class TopFilms(Resource):
@@ -13,4 +13,20 @@ class FilmDetails(Resource):
     def get(self,id):
           return one_film(id), 200
     
-    #go to app: api.resource()
+
+class SearchedFilmsResults(Resource):
+    def get(self):
+
+        search_for=request.args.get('s', '').strip()
+        search_by=request.args.get('by', '')
+
+
+        if not search_for:
+            return {'message', "provide a search input"}
+
+        return search_films(search_for, search_by), 200
+    
+
+         
+
+#go to app: api.resource()
