@@ -12,6 +12,7 @@ from models.category import Category
 def top_films():
        #sql query gets top 5 films
        result= db.session.query(
+              Film.film_id,
               Film.title,
               func.count(Rental.rental_id).label("rental_count")
        )\
@@ -66,6 +67,8 @@ def search_films(srch_str,srch_by):
               return {"message": "Film not found"}, 404 
        
        return films_search_schema.dump(result)
+
+
 
 
 #go to film_resource

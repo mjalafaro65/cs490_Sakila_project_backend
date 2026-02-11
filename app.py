@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api 
+from flask_cors import CORS
 from config import Config 
 from extensions import db
 from flask_restful import Resource
@@ -13,6 +14,7 @@ api=Api(app)
 app.config.from_object(Config)
 
 db.init_app(app)
+CORS(app)
 api.init_app(app)
 
 
