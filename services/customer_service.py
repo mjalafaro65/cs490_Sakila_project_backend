@@ -21,7 +21,7 @@ def list_cust(page=1, per_page=12):
         }
         for c in customers
     ]
-
+    
     return {
         "items": data,
         "total": pagination.total,

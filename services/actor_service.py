@@ -9,11 +9,9 @@ from schemas.actor_schema import actors_schema, actor_schema
 def top_actors():
     #sql query gets top 5 films
     result= db.session.query(
-    #result =(
-       #Actor.query
+        Actor.actor_id,
         Actor.first_name,
         Actor.last_name,
-        #Actor.actor_id, #delete this if it breaks 
        func.count(Film.film_id).label("films")
        )\
        .join(Actor.films)\
