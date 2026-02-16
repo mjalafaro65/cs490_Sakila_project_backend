@@ -7,6 +7,7 @@ class BaseActorSchema(mash.SQLAlchemyAutoSchema):
         load_instance=True
 
     film_count=mash.Integer(dump_only=True)
+    actor_id = mash.Integer(dump_only=True)
 
 class ActorFilmsSchema(BaseActorSchema):
 
