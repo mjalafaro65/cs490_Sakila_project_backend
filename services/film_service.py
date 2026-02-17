@@ -7,28 +7,36 @@ from models.inventory import Inventory
 from models.actor import Actor
 from sqlalchemy import func
 from schemas import films_schema, film_schema, films_search_schema
+from models.associations import film_actor
 from models.category import Category
 
-def top_films():
+def top5_films(actor_id=None):
        #sql query gets top 5 films
-       result= db.session.query(
+       query= db.session.query(
               Film.film_id,
               Film.title,
               func.count(Rental.rental_id).label("rental_count")
        )\
        .join(Inventory, Film.film_id==Inventory.film_id)\
-       .join(Rental,Inventory.inventory_id==Rental.inventory_id)\
-       .group_by(Film.film_id)\
-       .order_by(func.count(Rental.rental_id).desc())\
+       .join(Rental,Inventory.inventory_id==Rental.inventory_id)
+       
+       if actor_id:
+              query= query.join(film_actor, Film.film_id== film_actor.c.film_id)\
+                     .filter(film_actor.c.actor_id== actor_id)
+
+       result=query.group_by(Film.film_id)\
+       .order_by(func.count(Rental.rental_id).desc(), Film.title.asc())\
        .limit(5)\
        .all()
       
+
        #dump converts to dictionary
        return films_schema.dump(result)
 
 
 def one_film(id):
        #sql query gets one film
+
        result= Film.query.get(id)
 
        if not result:
