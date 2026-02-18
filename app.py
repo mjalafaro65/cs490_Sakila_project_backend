@@ -5,8 +5,8 @@ from config import Config
 from extensions import db
 from flask_restful import Resource
 from resources.film_resource import TopFilms, FilmDetails, SearchedFilmsResults
-from resources.actor_resource import Top5Actors, ActorWithFilms
-from resources.customer_resourse import CostumerList
+from resources.actor_resource import Top5Actors, ActorWithFilms, ActorTopFilms
+from resources.customer_resourse import CustomerList
 
 
 app=Flask(__name__)
@@ -30,8 +30,9 @@ api.add_resource(TopFilms, "/films/top")
 api.add_resource(FilmDetails, "/films/<int:id>")
 api.add_resource(Top5Actors, "/actors/top")
 api.add_resource(ActorWithFilms, "/actors/<int:id>")
+api.add_resource(ActorTopFilms, "/actors/top/<int:id>")
 api.add_resource(SearchedFilmsResults, "/films/search")
-api.add_resource(CostumerList, "/customers/list")
+api.add_resource(CustomerList, "/customers/list")
 
 
 if __name__=="__main__":

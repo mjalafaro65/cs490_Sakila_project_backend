@@ -12,6 +12,14 @@ class ActorFilmsSchema(BaseActorSchema):
 
     films=mash.Nested('BaseFilmSchema', many=True,only=("title",) )
 
+class ActorTopFilms(BaseActorSchema):
+    films = mash.Nested(
+        'BaseFilmSchema',
+        many=True,
+        only=("film_id", "title")
+    )
 
 actors_schema=BaseActorSchema(many=True)
 actor_schema=ActorFilmsSchema()
+actor_top_films_schema = ActorTopFilms()
+

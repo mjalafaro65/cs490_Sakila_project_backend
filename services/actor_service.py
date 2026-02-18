@@ -3,8 +3,9 @@ from extensions import db
 from models.film import Film
 from models.actor import Actor
 from sqlalchemy import func
-from schemas.actor_schema import actors_schema, actor_schema
+from schemas.actor_schema import actors_schema, actor_schema, actor_top_films_schema
 from services.film_service import top5_films
+from app import db
 
 def top5_actors():
     #sql query gets top 5 films
@@ -40,5 +41,25 @@ def actor_details(id):
        # possible fix: remove list of all films
 
        return data
+
+
+def actor_top_films(actor_id, limit=5):
+    actor = db.session.get(Actor, actor_id)
+    if not actor:
+        return None 
+
+    top_film = (
+        db.session.query(Film)
+        .join(Film.actors) 
+        .filter(Actor.actor_id == actor_id)
+        #.order_by(Film.rental_count.desc()) 
+        .limit(limit)
+        .all()
+    )
+
+    actor.films = top_film
+
+    return actor
+
 
 #go to film_resource

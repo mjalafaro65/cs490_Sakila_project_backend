@@ -11,5 +11,5 @@ class BaseCustomerSchema(mash.SQLAlchemyAutoSchema):
         load_instance=True #help when json -> model(post)
 
 
-costumer_list_schema=BaseCustomerSchema(many=True)
+customer_list_schema=BaseCustomerSchema(many=True)
 
