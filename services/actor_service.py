@@ -36,10 +36,6 @@ def actor_details(id):
        
        #dump: converts to dictionary
        data = actor_schema.dump(result)
-       data["top_5_films"]=top5_films(actor_id=id)
-       
-       # possible fix: remove list of all films
-
        return data
 
 

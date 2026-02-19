@@ -9,8 +9,8 @@ class BaseActorSchema(mash.SQLAlchemyAutoSchema):
     film_count=mash.Integer(dump_only=True)
 
 class ActorFilmsSchema(BaseActorSchema):
-
     films=mash.Nested('BaseFilmSchema', many=True,only=("title",) )
+
 
 class ActorTopFilms(BaseActorSchema):
     films = mash.Nested(
