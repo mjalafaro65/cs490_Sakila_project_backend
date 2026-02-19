@@ -46,22 +46,23 @@ def one_film(id):
        return film_schema.dump(result)
 
 
-def search_films(srch_str,srch_by):
+def search_films(srch_str,srch_by, page=1, per_page=10):
 
        #clean white spaces and reduce middle ones to one
        cleaned=" ".join(srch_str.split())
        search_pattern=f"%{cleaned}%"
 
        
-       query=db.session.query(Film).join(Film.actors).join(Film.categories)
+       query=Film.query
               
        if srch_by =="title":
-              result=query.filter(Film.title.ilike(search_pattern))
+              query=query.filter(Film.title.ilike(search_pattern))
 
               
 
        elif srch_by == "actor":
-              result= query.filter(or_(Actor.first_name.ilike(search_pattern),
+              query= query.join(Film.actors).filter(
+               or_(Actor.first_name.ilike(search_pattern),
                                    Actor.last_name.ilike(search_pattern),
                                    func.concat(Actor.first_name, " ", Actor.last_name).ilike(search_pattern)
 
@@ -69,12 +70,23 @@ def search_films(srch_str,srch_by):
               
 
        elif srch_by == "genre":
-              result=query.filter(Category.name.ilike(search_pattern))
+              query = query.join(Film.categories).filter(
+        Category.name.ilike(search_pattern)
+    )
 
        else:
               return {"message": "Film not found"}, 404 
        
-       return films_search_schema.dump(result)
+       query = query.distinct()
+
+       pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+
+       return {
+              "items": films_search_schema.dump(pagination.items),
+              "page": pagination.page,
+              "pages": pagination.pages,
+              "total": pagination.total
+       }
 
 
 
