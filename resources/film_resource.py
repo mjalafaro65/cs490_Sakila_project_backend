@@ -24,16 +24,18 @@ class SearchedFilmsResults(Resource):
         #?s=...&by=... <=gets args from here
         search_for=request.args.get('s', '').strip()
         search_by=request.args.get('by', '')
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
 
         if not search_for:
-            return {"message":"Please provide input"}
+            return {"message":"Please provide input"}, 400
                 
         valid_types=['title', 'actor', 'genre']
                 
         if search_by not in valid_types:
             return {"message": f"Invalid search type must be one of: {','.join(valid_types)}"}, 400
 
-        return search_films(search_for, search_by), 200
+        return search_films(search_for, search_by, page, per_page), 200
     
 
          
