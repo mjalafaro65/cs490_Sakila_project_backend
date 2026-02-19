@@ -13,8 +13,7 @@ class BaseFilmSchema(mash.SQLAlchemyAutoSchema):
     rental_count=mash.Integer(dump_only=True) #dump_only: ont with get?
 
 class FilmSearchSchema(BaseFilmSchema):
-    class Meta(BaseFilmSchema.Meta):
-        include_relationships=True
+   
          
     actors=mash.Nested('BaseActorSchema', many=True, only=("first_name", "last_name"))
     categories=mash.Nested('BaseCategorySchema', many=True, only=("name",))
