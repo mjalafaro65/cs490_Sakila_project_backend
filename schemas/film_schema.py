@@ -17,6 +17,8 @@ class FilmSearchSchema(BaseFilmSchema):
          
     actors=mash.Nested('BaseActorSchema', many=True, only=("first_name", "last_name"))
     categories=mash.Nested('BaseCategorySchema', many=True, only=("name",))
+
+    
 #Used in service:
 #worker obj for one film
 film_schema=BaseFilmSchema()

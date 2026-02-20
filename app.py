@@ -6,7 +6,7 @@ from extensions import db
 from flask_restful import Resource
 from resources.film_resource import TopFilms, FilmDetails, SearchedFilmsResults
 from resources.actor_resource import Top5Actors, ActorWithFilms, ActorTopFilms
-from resources.customer_resourse import CustomerList
+from resources.customer_resourse import CustomerList, SearchedCustomerResults
 
 
 app=Flask(__name__)
@@ -26,13 +26,33 @@ class Hello(Resource):
 
 
 api.add_resource(Hello, "/")
+#gets top 5 films
 api.add_resource(TopFilms, "/films/top")
+
+#gets details of each film
 api.add_resource(FilmDetails, "/films/<int:id>")
+ 
+# get top 5 actors
 api.add_resource(Top5Actors, "/actors/top")
-api.add_resource(ActorWithFilms, "/actors/<int:id>")
-api.add_resource(ActorTopFilms, "/actors/top/<int:id>")
+
+#gets all films of one actor
+api.add_resource(ActorWithFilms, "/actors/<int:id>") #check
+
+#gets the top films of once actor
+api.add_resource(ActorTopFilms, "/actors/top/<int:id>")#check
+
+#searches films search?s=..&by=..
 api.add_resource(SearchedFilmsResults, "/films/search")
+
+#get list of all costumers
 api.add_resource(CustomerList, "/customers/list")
+
+#search costumers
+api.add_resource(SearchedCustomerResults, "/customers/search")
+
+#rent film 
+api.add_resource(SearchedCustomerResults, "/customers/search")
+
 
 
 if __name__=="__main__":

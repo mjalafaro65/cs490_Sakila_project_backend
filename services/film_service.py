@@ -70,9 +70,7 @@ def search_films(srch_str,srch_by, page=1, per_page=10):
               
 
        elif srch_by == "genre":
-              query = query.join(Film.categories).filter(
-        Category.name.ilike(search_pattern)
-    )
+              query = query.join(Film.categories).filter( Category.name.ilike(search_pattern))
 
        else:
               return {"message": "Film not found"}, 404 
@@ -87,6 +85,8 @@ def search_films(srch_str,srch_by, page=1, per_page=10):
               "pages": pagination.pages,
               "total": pagination.total
        }
+
+
 
 
 
