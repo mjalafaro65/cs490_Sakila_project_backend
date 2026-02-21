@@ -6,7 +6,8 @@ from extensions import db
 from flask_restful import Resource
 from resources.film_resource import TopFilms, FilmDetails, SearchedFilmsResults
 from resources.actor_resource import Top5Actors, ActorWithFilms, ActorTopFilms
-from resources.customer_resourse import CustomerList, SearchedCustomerResults
+from resources.customer_resource import CustomerResource
+from resources.rental_resource import RentalRecords
 
 
 app=Flask(__name__)
@@ -44,14 +45,16 @@ api.add_resource(ActorTopFilms, "/actors/top/<int:id>")#check
 #searches films search?s=..&by=..
 api.add_resource(SearchedFilmsResults, "/films/search")
 
+
+#####after learning more about end points
 #get list of all costumers
-api.add_resource(CustomerList, "/customers/list")
+api.add_resource(CustomerResource, "/customers")
 
-#search costumers
-api.add_resource(SearchedCustomerResults, "/customers/search")
 
-#rent film 
-api.add_resource(SearchedCustomerResults, "/customers/search")
+#create a rental record
+api.add_resource(RentalRecords, "/rentals")
+
+
 
 
 

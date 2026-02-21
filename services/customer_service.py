@@ -9,8 +9,6 @@ def all_customers_paginated(page=1,per_page=15):
             error_out=False
     ) 
  
-
-    
     return {
         "items":customer_list_schema.dump(pagination.items),
         "total":pagination.total,

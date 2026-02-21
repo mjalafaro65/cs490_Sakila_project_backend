@@ -1,4 +1,3 @@
-
 from extensions import db
 from sqlalchemy import or_
 from models.film import Film
@@ -85,10 +84,6 @@ def search_films(srch_str,srch_by, page=1, per_page=10):
               "pages": pagination.pages,
               "total": pagination.total
        }
-
-
-
-
 
 
 #go to film_resource

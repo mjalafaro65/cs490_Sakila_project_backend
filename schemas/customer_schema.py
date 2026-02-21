@@ -9,6 +9,9 @@ class BaseCustomerSchema(mash.SQLAlchemyAutoSchema):
     class Meta:
         model=Customer #we dont need to repeat all  film column names
         load_instance=True #help when json -> model(post)
+    
+    # dump_only=("rental_id", "")
+
 
 
 customer_list_schema=BaseCustomerSchema(many=True)

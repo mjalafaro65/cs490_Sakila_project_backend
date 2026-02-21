@@ -3,7 +3,7 @@ from extensions import db
 from models.film import Film
 from models.actor import Actor
 from sqlalchemy import func
-from schemas.actor_schema import actors_schema, actor_schema, actor_top_films_schema
+from schemas.actor_schema import actors_schema, actor_schema
 from services.film_service import top5_films
 from app import db
 
