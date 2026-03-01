@@ -1,21 +1,20 @@
 from extensions import db
-from datetime import datetime
+from sqlalchemy import func
 
+#customer table
 class Customer(db.Model):
 
-    __table_name__="customer"
+    __tablename__="customer"
     customer_id=db.Column(db.Integer, primary_key=True)
-    store_id=db.Column(db.Integer, nullable=False)
+    store_id=db.Column(db.Integer, default=1, nullable=False)
     last_name=db.Column(db.String(45),nullable=False)
     first_name=db.Column(db.String(45),nullable=False)
     email=db.Column(db.String(50),nullable=True)
-    address_id=db.Column(db.Integer,nullable=False)
-    active=db.Column(db.Integer, nullable=False)
-    # create_date=db.Column(db.Datetime,default=datetime.utcnow, nullable=False)
-    # last_update=db.Column(db.Datetime,default=datetime.utcnow, onupdate=datetime.utcnow, nullable=True )
+    address_id=db.Column(db.Integer,db.ForeignKey("address.address_id"),nullable=False)
+    active=db.Column(db.Integer, default=1,nullable=False)
+    create_date=db.Column(db.DateTime,default=func.now(), nullable=False)
+    last_update=db.Column(db.DateTime,default=func.now(), onupdate=func.now(), nullable=True )
 
-
-    
 
 
 

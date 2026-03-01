@@ -1,6 +1,13 @@
 
 from schemas import customer_list_schema
 from models.customer import Customer
+from extensions import db
+from sqlalchemy import select
+from services.addrss_city_country_service import get_or_create_country, get_or_create_city, get_or_create_address
+
+
+
+
 
 def all_customers_paginated(page=1,per_page=15):
     pagination=Customer.query.order_by(Customer.first_name.asc()).paginate(
@@ -52,3 +59,49 @@ def search_customers(srch_str,srch_by, page=1, per_page=10):
               "pages": pagination.pages,
               "total": pagination.total
        }
+
+
+def get_customer_by_email(email):
+       return db.session.execute(select(Customer).where(Customer.email==email)).scalar()
+
+def get_customer_by_id(id):
+       return db.session.execute(select(Customer).where(Customer.customer_id==id))
+
+def create_customer_record(data):
+
+       country=get_or_create_country(data.get('country'))
+       city=get_or_create_city(data.get('city'), country.country_id)
+       address=get_or_create_address(data, city.city_id)
+
+       customer_obj=Customer(
+              last_name=data.get('last_name'),
+              first_name=data.get('first_name'),
+              email=data.get('email'),
+              address_id=address.address_id
+             
+       )
+
+       db.session.add(customer_obj)
+       db.session.commit()
+       return customer_obj
+
+#check for customer address changes
+def save_customer(data, customer_obj):
+
+       #get or create address if
+       country_obj=get_or_create_country(data.get('country'))
+       city_obj=get_or_create_city(data.get('city'), country_obj.country_id)
+       address_obj=get_or_create_address(data.get('address'), city_obj.city_id)
+
+       #change to new created address id and replace it in object
+       if customer_obj != address_obj.address_id :
+                customer_obj.address_id=address_obj.address_id
+
+
+       db.session.commit()
+       
+       #return updated customer object
+       return customer_obj
+       
+       
+
