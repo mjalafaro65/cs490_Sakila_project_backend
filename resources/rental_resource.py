@@ -9,8 +9,8 @@ class RentalRecords(Resource):
 
         data=request.get_json()
         try:
-            rentalObj=rental_schema.load(data)
-            saved_rental=create_rent_record(rentalObj)
+            rental_obj=rental_schema.load(data)
+            saved_rental=create_rent_record(rental_obj)
            
             return rental_schema.dump(saved_rental), 201
         
@@ -18,7 +18,7 @@ class RentalRecords(Resource):
             return e.messages, 400
         
 
-        
+       
 
         
 
