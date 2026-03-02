@@ -1,7 +1,6 @@
 from flask_restful import Resource, reqparse, request
-from services.customer_service import all_customers_paginated, search_customers, create_customer_record, get_customer_by_email, get_customer_by_id, save_customer
-from services.addrss_city_country_service import get_or_create_country, get_or_create_city, get_or_create_address
-from schemas import address_customer_schema, single_customer_schema
+from services.customer_service import all_customers_paginated, search_customers, create_customer_record, get_customer_by_email, get_customer_by_id, save_customer, delete_customer, get_rentals_customer, return_film_by_id
+from schemas import address_customer_schema, single_customer_schema, update_one_customer, rentals_customer_schema
 from marshmallow import ValidationError
 
 
@@ -72,14 +71,14 @@ class OneCustomerResource(Resource):
             return {"message":"Error Fields Invalid"}, 400
         
         #find customer
-        customer_obj=get_customer_by_id(data.get('customer_id'))
+        customer_obj=get_customer_by_id(id)
 
         if not customer_obj:
             return {'message':"Customer not found"}, 404
 
         try: 
-            #makes changes in base fields in customer object 
-            single_customer_schema.load(data, instance=customer_obj,partial=True)
+            #makes changes in base fields in customer obj 
+            update_one_customer.load(data, instance=customer_obj)
 
             #check for updates in address and update
             updated_customer=save_customer(data, customer_obj)
@@ -89,4 +88,48 @@ class OneCustomerResource(Resource):
         
         except ValidationError as e:
             return e.messages, 400
+        
+    def delete(self,id):
+
+        customer_obj=get_customer_by_id(id)
+
+        if not customer_obj:
+            {"message":"Customer not found"},404
+        try:
+            delete_customer(customer_obj)
+            return {"message": "Customer deleted"}
+        
+        except Exception as e:
+            return {"message": str(e)},500
+        
+
+    def get(self,id):
+
+        customer_obj=get_customer_by_id(id)
+
+        if not customer_obj:
+            {"message":"Customer not found"},404
+
+        rental_customer_obj=get_rentals_customer(customer_obj)
+
+        try:
+            return rentals_customer_schema.dump(rental_customer_obj), 200
+        
+        except Exception as e:
+            return {"message": str(e)},500
+    
+class ReturnCustomerRental(Resource):
+    def patch(self, customer_id, film_id):
+
+        rental_record=return_film_by_id(customer_id, film_id)
+
+        if  rental_record == None:
+            return {'message':"Already Returned"}, 404
+        else:
+             return {'message':"Successful return"},200
+            
+
+
+
+        
 

@@ -1,8 +1,10 @@
 
 from schemas import customer_list_schema
 from models.customer import Customer
+from models.rental import Rental
+from models.inventory import Inventory
 from extensions import db
-from sqlalchemy import select
+from sqlalchemy import select, func
 from services.addrss_city_country_service import get_or_create_country, get_or_create_city, get_or_create_address
 
 
@@ -65,7 +67,7 @@ def get_customer_by_email(email):
        return db.session.execute(select(Customer).where(Customer.email==email)).scalar()
 
 def get_customer_by_id(id):
-       return db.session.execute(select(Customer).where(Customer.customer_id==id))
+       return db.session.execute(select(Customer).where(Customer.customer_id==id)).scalar()
 
 def create_customer_record(data):
 
@@ -77,8 +79,7 @@ def create_customer_record(data):
               last_name=data.get('last_name'),
               first_name=data.get('first_name'),
               email=data.get('email'),
-              address_id=address.address_id
-             
+              address_id=address.address_id      
        )
 
        db.session.add(customer_obj)
@@ -91,7 +92,7 @@ def save_customer(data, customer_obj):
        #get or create address if
        country_obj=get_or_create_country(data.get('country'))
        city_obj=get_or_create_city(data.get('city'), country_obj.country_id)
-       address_obj=get_or_create_address(data.get('address'), city_obj.city_id)
+       address_obj=get_or_create_address(data, city_obj.city_id)
 
        #change to new created address id and replace it in object
        if customer_obj != address_obj.address_id :
@@ -103,5 +104,43 @@ def save_customer(data, customer_obj):
        #return updated customer object
        return customer_obj
        
+def delete_customer(customer_obj):
+
+       db.session.delete(customer_obj)
+       db.session.commit()
        
+       return
+
+def get_rentals_customer(customer_obj):
+
+       id=customer_obj.customer_id
+       total_count=db.session.execute(select(func.count(Rental.rental_id))\
+                                .where(Rental.customer_id==id)).scalar() or 0
+       active_count=db.session.execute(select(func.count(Rental.rental_id))\
+                                 .where(Rental.customer_id==id, Rental.return_date==None)).scalar() or 0
+       
+       customer_obj.active_count=active_count
+       customer_obj.returned_count=total_count-active_count
+
+       return customer_obj
+
+def return_film_by_id(customer_id, film_id):
+       stmt=select(Rental)\
+       .join(Inventory, Rental.inventory_id==Inventory.inventory_id)\
+       .where(Rental.customer_id==customer_id,
+              Inventory.film_id==film_id,
+              Rental.return_date==None)
+       
+       rental=db.session.execute(stmt).scalar_one_or_none()
+
+       if not rental:
+              return None
+       
+       rental.return_date=func.now()
+       
+       db.session.commit()
+
+       return rental
+
+
 

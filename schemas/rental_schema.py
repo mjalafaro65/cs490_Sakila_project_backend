@@ -5,7 +5,7 @@ class BaseRentalSchema(mash.SQLAlchemyAutoSchema):
     class Meta:
         model=Rental
         load_instance=True #used for post: returns model object ready to send to database
-        include_fk=True # it will provide foreign key instead of the whole foreign model object
+        include_fk=True # it will provide(also needed when post) foreign key instead of the whole foreign model object
 
     ##this will only work with get, prevents user from sending/posting these
     dump_only=("rental_id", "rental_date", "return_date", "last_update", "staff_id")

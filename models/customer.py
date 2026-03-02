@@ -16,5 +16,7 @@ class Customer(db.Model):
     last_update=db.Column(db.DateTime,default=func.now(), onupdate=func.now(), nullable=True )
 
 
+    rentals=db.relationship('Rental', backref='customer', cascade="all, delete-orphan")
+    # payments=db.relationship('Payment', backref='customer', cascade="all, delete-orphan")
 
 

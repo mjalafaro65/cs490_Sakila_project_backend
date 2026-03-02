@@ -6,7 +6,7 @@ from extensions import db
 from flask_restful import Resource
 from resources.film_resource import TopFilms, FilmDetails, SearchedFilmsResults
 from resources.actor_resource import Top5Actors, ActorWithFilms, ActorTopFilms
-from resources.customer_resource import CustomerResource, OneCustomerResource
+from resources.customer_resource import CustomerResource, OneCustomerResource, ReturnCustomerRental
 from resources.rental_resource import RentalRecords
 
 
@@ -54,6 +54,8 @@ api.add_resource(SearchedFilmsResults, "/films/search")
 api.add_resource(CustomerResource, "/customers")
 
 api.add_resource(OneCustomerResource, "/customers/<int:id>")
+
+api.add_resource(ReturnCustomerRental, "/customers/<int:customer_id>/rentals/films/<int:film_id>/return")
 
 
 
