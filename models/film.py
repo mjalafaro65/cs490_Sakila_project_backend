@@ -20,7 +20,6 @@ class Film(db.Model):
 
     inventories = db.relationship("Inventory", backref="film")
 
-
     # def to_dict(self):
     #     return{
 

@@ -23,6 +23,5 @@ def create_rent_record(film_id, customer_id):
     except Exception as e:
         print("DB commit error:", e)
         raise
-        #print(f"Rental created: rental_id={rental.rental_id}")
 
     return rental
