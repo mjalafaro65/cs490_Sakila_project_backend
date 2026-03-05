@@ -68,3 +68,12 @@ def get_or_create_address(data, city_id):
         db.session.add(address_obj)
         db.session.flush()
     return address_obj
+
+def get_address_by_id(id):
+    return db.session.execute(select(Address).where(Address.address_id==id)).scalar()
+
+def get_city_by_id(id):
+        return db.session.execute(select(City).where(City.city_id==id)).scalar()
+
+def get_country_by_if(id):
+        return db.session.execute(select(Country).where(Country.country_id==id)).scalar()

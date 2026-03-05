@@ -4,9 +4,12 @@ from models.customer import Customer
 from models.rental import Rental
 from models.inventory import Inventory
 from models.film import Film
+from models.address import Address
+from models.country import Country
+from models.city import City
 from extensions import db
 from sqlalchemy import select, func
-from services.addrss_city_country_service import get_or_create_country, get_or_create_city, get_or_create_address
+from services.addrss_city_country_service import get_or_create_country, get_or_create_city, get_or_create_address, get_address_by_id, get_city_by_id, get_country_by_if
 
 
 
@@ -68,7 +71,14 @@ def get_customer_by_email(email):
        return db.session.execute(select(Customer).where(Customer.email==email)).scalar()
 
 def get_customer_by_id(id):
-       return db.session.execute(select(Customer).where(Customer.customer_id==id)).scalar()
+    stmt = (
+        select(Customer)
+        
+        .where(Customer.customer_id == id)
+    )
+    return db.session.execute(stmt).scalar()
+
+
 
 def create_customer_record(data):
 
@@ -113,10 +123,31 @@ def delete_customer(customer_obj):
        
        return
 
-def get_rentals_customer(customer_obj):
+def get_rental_details_customer(customer_obj):
 
        id=customer_obj.customer_id
 
+       #get address id and obj
+       addr_id=customer_obj.address_id
+       addr_obj=get_address_by_id(addr_id)
+
+       #get city id and obj
+       city_id=addr_obj.city_id
+       city_obj=get_city_by_id(city_id)
+
+       #get country id and obj
+       country_id=city_obj.country_id
+       country_obj=get_country_by_if(country_id)
+
+       #insert addr info in customer obj
+       customer_obj.address_val = addr_obj.address
+       customer_obj.address2 = addr_obj.address2
+       customer_obj.district = addr_obj.district
+       customer_obj.postal_code = addr_obj.postal_code
+       customer_obj.phone = addr_obj.phone
+       customer_obj.city = city_obj.city
+       customer_obj.country = country_obj.country
+       
        #get total rentals
        total_count=db.session.execute(select(func.count(Rental.rental_id))\
                                 .where(Rental.customer_id==id)).scalar() or 0
@@ -139,6 +170,8 @@ def get_rentals_customer(customer_obj):
        
        #attach to customer obj
        customer_obj.rented_films = results
+
+
 
        return customer_obj
 

@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse, request
-from services.customer_service import all_customers_paginated, search_customers, create_customer_record, get_customer_by_email, get_customer_by_id, save_customer, delete_customer, get_rentals_customer, return_film_by_id
+from services.customer_service import all_customers_paginated, search_customers, create_customer_record, get_customer_by_email, get_customer_by_id, save_customer, delete_customer, get_rental_details_customer, return_film_by_id
 from schemas import address_customer_schema, single_customer_schema, update_one_customer, rentals_customer_schema
 from marshmallow import ValidationError
 
@@ -110,7 +110,7 @@ class OneCustomerResource(Resource):
         if not customer_obj:
             {"message":"Customer not found"},404
 
-        rental_customer_obj=get_rentals_customer(customer_obj)
+        rental_customer_obj=get_rental_details_customer(customer_obj)
 
         try:
             return rentals_customer_schema.dump(rental_customer_obj), 200
