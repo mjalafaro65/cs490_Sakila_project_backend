@@ -12,7 +12,7 @@ class Rental(db.Model):
     rental_date=db.Column(db.DateTime , default=func.now(), nullable=False)
     return_date=db.Column(db.DateTime, nullable=True)
     staff_id=db.Column(db.Integer, default=1, nullable=False)
-    last_update=db.Column(db.DateTime, default=func.now, onupdate=func.now(), nullable=False)
+    last_update=db.Column(db.DateTime, default=func.now(), onupdate=func.now(), nullable=False)
 
 
    
