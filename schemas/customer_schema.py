@@ -35,8 +35,6 @@ class RentalsCustomerSchema(AddressCostumerSchema):
     
     rented_films = fields.List(fields.Dict(), dump_only=True)
 
-
-
 single_customer_schema=BaseCustomerSchema()
 update_one_customer=UpdateCustomerSchema()
 customer_list_schema=BaseCustomerSchema(many=True)

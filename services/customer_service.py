@@ -138,7 +138,7 @@ def get_rental_details_customer(customer_obj):
        country_obj=get_country_by_if(country_id)
 
        #insert addr info in customer obj
-       customer_obj.address_val = addr_obj.address
+       customer_obj.address = addr_obj.address
        customer_obj.address2 = addr_obj.address2
        customer_obj.district = addr_obj.district
        customer_obj.postal_code = addr_obj.postal_code
