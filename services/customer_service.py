@@ -3,6 +3,7 @@ from schemas import customer_list_schema
 from models.customer import Customer
 from models.rental import Rental
 from models.inventory import Inventory
+from models.film import Film
 from extensions import db
 from sqlalchemy import select, func
 from services.addrss_city_country_service import get_or_create_country, get_or_create_city, get_or_create_address
@@ -105,8 +106,9 @@ def save_customer(data, customer_obj):
        return customer_obj
        
 def delete_customer(customer_obj):
-
+       #delete customer locally
        db.session.delete(customer_obj)
+       #commit deletion
        db.session.commit()
        
        return
@@ -114,15 +116,32 @@ def delete_customer(customer_obj):
 def get_rentals_customer(customer_obj):
 
        id=customer_obj.customer_id
+
+       #get total rentals
        total_count=db.session.execute(select(func.count(Rental.rental_id))\
                                 .where(Rental.customer_id==id)).scalar() or 0
+       
+       #get active rentals
        active_count=db.session.execute(select(func.count(Rental.rental_id))\
                                  .where(Rental.customer_id==id, Rental.return_date==None)).scalar() or 0
        
+       #insert active rentals to objects
        customer_obj.active_count=active_count
        customer_obj.returned_count=total_count-active_count
 
+       stmt = (
+              select(Film.title, Film.film_id)
+              .join(Inventory, Film.film_id == Inventory.film_id)
+              .join(Rental, Inventory.inventory_id == Rental.inventory_id)
+              .where(Rental.customer_id == id)
+       )
+       results = db.session.execute(stmt).mappings().all()
+       
+       #attach to customer obj
+       customer_obj.rented_films = results
+
        return customer_obj
+
 
 def return_film_by_id(customer_id, film_id):
        stmt=select(Rental)\

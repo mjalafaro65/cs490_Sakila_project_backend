@@ -32,6 +32,8 @@ class UpdateCustomerSchema(BaseCustomerSchema):
 class RentalsCustomerSchema(BaseCustomerSchema):
     active_count=fields.Int(dump_only=True) 
     returned_count=fields.Int(dump_only=True) 
+    rented_films = fields.List(fields.Dict(), dump_only=True)
+
 
 
 single_customer_schema=BaseCustomerSchema()
