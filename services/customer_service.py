@@ -4,11 +4,9 @@ from models.customer import Customer
 from models.rental import Rental
 from models.inventory import Inventory
 from models.film import Film
-from models.address import Address
-from models.country import Country
-from models.city import City
+
 from extensions import db
-from sqlalchemy import select, func
+from sqlalchemy import select, func, case
 from services.addrss_city_country_service import get_or_create_country, get_or_create_city, get_or_create_address, get_address_by_id, get_city_by_id, get_country_by_if
 
 
@@ -161,10 +159,13 @@ def get_rental_details_customer(customer_obj):
        customer_obj.returned_count=total_count-active_count
 
        stmt = (
-              select(Film.title, Film.film_id)
+              select(Film.title, Film.film_id, case(
+                (Rental.return_date == None, "Active"),
+                else_="Returned").label("status"))
               .join(Inventory, Film.film_id == Inventory.film_id)
               .join(Rental, Inventory.inventory_id == Rental.inventory_id)
               .where(Rental.customer_id == id)
+              .order_by(Rental.rental_date.desc())
        )
        results = db.session.execute(stmt).mappings().all()
        
