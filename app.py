@@ -40,7 +40,7 @@ api.add_resource(Top5Actors, "/actors/top")
 api.add_resource(ActorWithFilms, "/actors/<int:id>") #check
 
 #gets the top films of once actor
-api.add_resource(ActorTopFilms, "/actors/top/<int:id>")#check
+api.add_resource(ActorTopFilms, "/actors/top/<int:id>") #check
 
 #searches films search?s=..&by=..
 api.add_resource(SearchedFilmsResults, "/films/search")

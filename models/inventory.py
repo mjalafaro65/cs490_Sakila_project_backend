@@ -7,5 +7,5 @@ class Inventory(db.Model):
     film_id=db.Column(db.Integer, db.ForeignKey("film.film_id"), nullable=False)
     store_id=db.Column(db.Integer,db.ForeignKey("store.store_id"), nullable=False)
 
-
+    rentals = db.relationship("Rental", backref="inventory")
     

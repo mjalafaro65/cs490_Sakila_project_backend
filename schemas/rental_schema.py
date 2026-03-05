@@ -1,6 +1,8 @@
 from extensions import mash
 from models.rental import Rental
 from marshmallow import fields
+from schemas.customer_schema import BaseCustomerSchema
+
 class BaseRentalSchema(mash.SQLAlchemyAutoSchema):
     class Meta:
         model=Rental
@@ -13,5 +15,9 @@ class BaseRentalSchema(mash.SQLAlchemyAutoSchema):
     inventory_id=fields.Int(required=True)
     customer_id=fields.Int(required=True)
 
+class RentalsCustomerSchema(BaseCustomerSchema):
+    active_count = fields.Int(dump_only=True)
+    returned_count = fields.Int(dump_only=True)
+    rentals = fields.Nested(BaseRentalSchema, many=True)
 
 rental_schema=BaseRentalSchema()

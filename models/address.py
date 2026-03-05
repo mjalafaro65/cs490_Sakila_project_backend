@@ -13,3 +13,5 @@ class Address(db.Model):
     phone=db.Column(db.String(20),nullable=False)
     location=db.Column(Geometry(geometry_type='POINT',srid=0),nullable=False, default=func.ST_GeomFromText('POINT(0 0)', 0))
     last_update=db.Column(db.DateTime, default=func.now(), onupdate=func.now())
+
+    city_country=db.relationship("City", backref="addresses", lazy="joined")

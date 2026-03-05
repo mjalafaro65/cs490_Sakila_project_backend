@@ -8,4 +8,4 @@ class Country(db.Model):
     country=db.Column(db.String(50), nullable=False)
     last_update=db.Column(db.DateTime,default=func.now(), onupdate=func.now(), nullable=False)
     
-    cities=db.relationship("City", backref="country_info", lazy=True)
+    #cities=db.relationship("City", backref="country_info", lazy=True)

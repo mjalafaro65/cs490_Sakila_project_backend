@@ -1,5 +1,6 @@
 
 from schemas import customer_list_schema
+from schemas import rental_schema
 from models.customer import Customer
 from models.rental import Rental
 from models.inventory import Inventory
@@ -112,6 +113,8 @@ def delete_customer(customer_obj):
        return
 
 def get_rentals_customer(customer_obj):
+
+       rentals=customer_obj.rentals
 
        id=customer_obj.customer_id
        total_count=db.session.execute(select(func.count(Rental.rental_id))\

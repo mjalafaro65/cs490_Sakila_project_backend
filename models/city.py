@@ -9,4 +9,4 @@ class City(db.Model):
     country_id=db.Column(db.Integer, db.ForeignKey("country.country_id"),nullable=False)
     last_update=db.Column(db.DateTime, default=func.now(), onupdate=func.now(), nullable=False)
     
-    addresses=db.relationship("Address",backref="city_info", lazy=True)
+    country = db.relationship("Country", backref="cities")

@@ -103,20 +103,41 @@ class OneCustomerResource(Resource):
             return {"message": str(e)},500
         
 
-    def get(self,id):
-
-        customer_obj=get_customer_by_id(id)
-
+    def get(self, id):
+        customer_obj = get_customer_by_id(id)
         if not customer_obj:
-            {"message":"Customer not found"},404
-
-        rental_customer_obj=get_rentals_customer(customer_obj)
+            return {"message": "Customer not found"}, 404
 
         try:
-            return rentals_customer_schema.dump(rental_customer_obj), 200
-        
+            # Dump basic customer info
+            customer_data = single_customer_schema.dump(customer_obj)
+
+            # Build rental list safely
+            rentals_data = []
+            for r in customer_obj.rentals:
+                film_id = None
+                film_title = None
+                if r.inventory and r.inventory.film:
+                    film_id = r.inventory.film.film_id
+                    film_title = r.inventory.film.title
+
+                rentals_data.append({
+                    "rental_id": r.rental_id,
+                    "film_id": film_id,
+                    "film_title": film_title,
+                    "returned": r.return_date is not None
+                })
+
+            # Add counts
+            customer_data['rentals'] = rentals_data
+            customer_data['returned_count'] = sum(1 for r in rentals_data if r['returned'])
+            customer_data['active_count'] = sum(1 for r in rentals_data if not r['returned'])
+
+            return customer_data, 200
+
         except Exception as e:
-            return {"message": str(e)},500
+            print("ERROR in customer GET:", e)
+            return {"message": str(e)}, 500
     
 class ReturnCustomerRental(Resource):
     def patch(self, customer_id, film_id):

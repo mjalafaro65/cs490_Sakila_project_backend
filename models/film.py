@@ -18,6 +18,9 @@ class Film(db.Model):
     replacement_cost = db.Column(db.Float, nullable=False)
     rating = db.Column(db.String(10))
 
+    inventories = db.relationship("Inventory", backref="film")
+
+
     # def to_dict(self):
     #     return{
 
